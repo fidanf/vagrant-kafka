@@ -30,8 +30,9 @@ Vagrant.configure('2') do |config|
       s.vm.provision 'shell', run: 'always', path: 'scripts/zookeeper.sh', args: i.to_s, privileged: false, env: vars
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
+        vb.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
         vb.customize ['modifyvm', :id, '--cpus', '1']
-        vb.customize ['modifyvm', :id, '--memory', '512']
+        vb.customize ['modifyvm', :id, '--memory', '1024']
         vb.customize ['modifyvm', :id, '--ostype', 'Ubuntu_64']
         vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
@@ -40,7 +41,7 @@ Vagrant.configure('2') do |config|
       end
     end
   end
-
+  
   # configure brokers
   (1..3).each do |i|
     config.vm.define "broker#{i}" do |s|
