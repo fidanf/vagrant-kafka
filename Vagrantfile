@@ -10,6 +10,7 @@ Vagrant.configure('2') do |config|
     'KAFKA_VERSION' => '0.10.0.1',
     'KAFKA_NAME' => 'kafka_2.11-$KAFKA_VERSION',
     'KAFKA_TARGET' => '/vagrant/tars',
+    'KAFKA_SCRIPTS' => '/vagrant/scripts',
     'KAFKA_HOME' => '$HOME/$KAFKA_NAME'
   }
 
@@ -27,10 +28,10 @@ Vagrant.configure('2') do |config|
       s.vm.hostname = "zookeeper#{i}"
       s.vm.network 'private_network', ip: "10.30.3.#{i + 1}"
       # s.vm.network "private_network", ip: "10.30.3.#{i+1}", netmask: "255.255.255.0", virtualbox__intnet: "my-network", drop_nat_interface_default_route: true
-      s.vm.provision 'shell', run: 'always', path: 'scripts/zookeeper.sh', args: i.to_s, privileged: false, env: vars
+      s.vm.provision 'shell', run: 'always', path: 'scripts/start-zookeeper.sh', args: i.to_s, privileged: false, env: vars
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
-        vb.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
+        # vb.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
         vb.customize ['modifyvm', :id, '--cpus', '1']
         vb.customize ['modifyvm', :id, '--memory', '1024']
         vb.customize ['modifyvm', :id, '--ostype', 'Ubuntu_64']
@@ -41,7 +42,7 @@ Vagrant.configure('2') do |config|
       end
     end
   end
-  
+
   # configure brokers
   (1..3).each do |i|
     config.vm.define "broker#{i}" do |s|
@@ -51,7 +52,7 @@ Vagrant.configure('2') do |config|
       s.vm.provision 'shell', run: 'always', path: 'scripts/start-broker.sh', args: i.to_s, privileged: false, env: vars
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
-        vb.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
+        # vb.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
         vb.customize ['modifyvm', :id, '--cpus', '2']
         vb.customize ['modifyvm', :id, '--memory', '2048']
         vb.customize ['modifyvm', :id, '--ostype', 'Ubuntu_64']
