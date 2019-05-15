@@ -18,7 +18,6 @@ echo "installing JDK and Kafka..."
 
 sudo apt-get install -y openjdk-8-jdk
 
-
 if [ ! -d $KAFKA_NAME ]; then 
    tar -zxvf "$KAFKA_TARGET/$KAFKA_NAME.tgz"
 fi

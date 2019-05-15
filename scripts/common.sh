@@ -2,4 +2,5 @@
 
 # Installing common dependencies 
 
-sudo apt-get install -y unzip nc
+sudo apt-get update
+sudo apt-get install -y unzip zip 

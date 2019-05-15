@@ -10,5 +10,3 @@ fi
 echo starting zookeeper...
 nohup $KAFKA_HOME/bin/zookeeper-server-start.sh /vagrant/config/zookeeper.properties 0<&- &> /tmp/zookeeper.log &
 sleep 2
-
-echo status | nc localhost:2181
