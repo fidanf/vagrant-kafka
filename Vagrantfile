@@ -11,7 +11,8 @@ Vagrant.configure('2') do |config|
     'KAFKA_NAME' => 'kafka_2.11-$KAFKA_VERSION',
     'KAFKA_TARGET' => '/vagrant/tars',
     'KAFKA_SCRIPTS' => '/vagrant/scripts',
-    'KAFKA_HOME' => '$HOME/$KAFKA_NAME'
+    'KAFKA_HOME' => '$HOME/$KAFKA_NAME',
+    'ZK_CLUSTER' => 'vkc-zk1:2181,vkc-zk2:2181,vkc-zk3:2181'
   }
 
   # escape environment variables to be loaded to /etc/profile.d/
