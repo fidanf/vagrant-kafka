@@ -5,4 +5,3 @@ if [ $# -gt 0 ]; then
 else
     echo "Usage: "$(basename $0)" <topic_name>"
 fi
-
