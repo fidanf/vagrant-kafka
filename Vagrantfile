@@ -20,10 +20,9 @@ Vagrant.configure('2') do |config|
   as_str = vars.map { |k, str| ["export #{k}=#{str.gsub '$', '\$'}"] }.join("\n")
 
   # provisioning aliases and bash functions
-  config.vm.provision "file", source: "./aliases", destination: "/tmp/bash_aliases"
-  config.vm.provision "shell", run: 'always', do |s|
-      s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /tmp/bash_aliases > /home/vagrant/.bash_aliases"
-    end
+  # config.vm.provision "file", source: "./aliases", destination: "/tmp/bash_aliases"
+  config.vm.provision "Exporting bash aliases", type: 'shell', run: 'always' do |s|
+      s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /vagrant/aliases > /home/vagrant/.bash_aliases"
   end
 
   # common provisioning for all
