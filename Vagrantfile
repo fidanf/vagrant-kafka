@@ -2,12 +2,13 @@
 # vi: set ft=ruby :
 
 Vagrant.configure('2') do |config|
+  # config.vm.box = 'rgsystems/xenial64'
   config.vm.box = 'ubuntu/xenial64'
   config.ssh.forward_agent = true # So that boxes don't have to setup key-less ssh
   config.ssh.insert_key = false # To generate a new ssh key and don't use the default Vagrant one
 
   vars = {
-    'KAFKA_VERSION' => '0.10.0.1',
+    'KAFKA_VERSION' => '2.1.1',
     'KAFKA_NAME' => 'kafka_2.11-$KAFKA_VERSION',
     'KAFKA_TARGET' => '/vagrant/tars',
     'KAFKA_SCRIPTS' => '/vagrant/scripts',
@@ -17,6 +18,13 @@ Vagrant.configure('2') do |config|
 
   # escape environment variables to be loaded to /etc/profile.d/
   as_str = vars.map { |k, str| ["export #{k}=#{str.gsub '$', '\$'}"] }.join("\n")
+
+  # provisioning aliases and bash functions
+  config.vm.provision "file", source: "./aliases", destination: "/tmp/bash_aliases"
+  config.vm.provision "shell", run: 'always', do |s|
+      s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /tmp/bash_aliases > /home/vagrant/.bash_aliases"
+    end
+  end
 
   # common provisioning for all
   config.vm.provision 'shell', path: 'scripts/common.sh'
