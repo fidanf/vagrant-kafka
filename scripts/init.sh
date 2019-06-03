@@ -6,11 +6,11 @@ echo "downloading kafka...$KAFKA_VERSION"
 if [ ! -f  $KAFKA_TARGET/$KAFKA_NAME.tgz ]; then
     mkdir -p $KAFKA_TARGET
 
-    # v2+ :
-    # wget -O "$KAFKA_TARGET/$KAFKA_NAME.tgz" http://www-eu.apache.org/dist/kafka/"$KAFKA_VERSION/$KAFKA_NAME.tgz"
+    # v2.1.1, 2.2.0, 2.2.1
+    wget -O "$KAFKA_TARGET/$KAFKA_NAME.tgz" http://www-eu.apache.org/dist/kafka/"$KAFKA_VERSION/$KAFKA_NAME.tgz"
 
-    # v1+ :
-    wget -O "$KAFKA_TARGET/$KAFKA_NAME.tgz" https://archive.apache.org/dist/kafka/"$KAFKA_VERSION/$KAFKA_NAME.tgz"
+    # <= 2.1.0
+    # wget -O "$KAFKA_TARGET/$KAFKA_NAME.tgz" https://archive.apache.org/dist/kafka/"$KAFKA_VERSION/$KAFKA_NAME.tgz"
 
 fi
 
