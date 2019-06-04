@@ -2,10 +2,13 @@
 # vi: set ft=ruby :
 
 Vagrant.configure('2') do |config|
-  # config.vm.box = 'rgsystems/xenial64'
-  config.vm.box = 'ubuntu/xenial64'
-  config.ssh.forward_agent = true # So that boxes don't have to setup key-less ssh
-  config.ssh.insert_key = false # To generate a new ssh key and don't use the default Vagrant one
+  
+  config.vm.box = 'rgsystems/xenial64'
+  # config.vm.box = 'ubuntu/xenial64'
+
+  # Allow SSH Agent Forward from The Box
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
 
   vars = {
     'KAFKA_VERSION' => '2.1.1',
