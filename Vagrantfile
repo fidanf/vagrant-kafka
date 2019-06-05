@@ -11,7 +11,7 @@ Vagrant.configure('2') do |config|
   config.ssh.insert_key = false
 
   vars = {
-    'KAFKA_VERSION' => '2.1.1',
+    'KAFKA_VERSION' => '0.10.0.1',
     'KAFKA_NAME' => 'kafka_2.11-$KAFKA_VERSION',
     'KAFKA_TARGET' => '/vagrant/tars',
     'KAFKA_SCRIPTS' => '/vagrant/scripts',
