@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash
 
 tar -C /tmp/zookeeper -xzf $KAFKA_TARGET/zookeeper-backup.tar.gz --strip-components=2
 pushd /tmp/zookeeper/
