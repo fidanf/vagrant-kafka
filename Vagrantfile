@@ -34,15 +34,16 @@ Vagrant.configure('2') do |config|
     s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /vagrant/aliases > /home/vagrant/.bash_aliases"
   end
 
-  config.vm.provision "Creating script symlinks", type: 'shell', run: 'once' do |s|
-    s.inline = "ln -s $KAFKA_SCRIPTS/*.sh /usr/local/bin/"
-  end
-
   # common provisioning for all
   config.vm.provision 'shell', path: 'scripts/common.sh'
   config.vm.provision 'shell', path: 'scripts/hosts-file-setup.sh', env: vars
   config.vm.provision 'shell', inline: "echo \"#{as_str}\" > /etc/profile.d/kafka_vagrant_env.sh", run: 'always'
   config.vm.provision 'shell', path: 'scripts/init.sh', env: vars
+
+  # globally available vagrant scripts
+  config.vm.provision "Creating script symlinks", type: 'shell', run: 'once' do |s|
+    s.inline = "find $KAFKA_SCRIPTS/ -name \"*.sh\" -exec ln -s {} /usr/local/bin/ \\;"
+  end
 
   # configure zookeeper cluster
   (1..3).each do |i|
