@@ -3,6 +3,7 @@
 
 Vagrant.configure('2') do |config|
   
+
   config.vm.box = 'rgsystems/xenial64'
   # config.vm.box = 'ubuntu/xenial64'
 
@@ -20,12 +21,16 @@ Vagrant.configure('2') do |config|
     'KAFKA_CLUSTER' => 'vkc-br1:9092,vkc-br2:9092,vkc-br3:9092'
   }
 
+  confDir = File.expand_path(File.dirname(__FILE__))
+
   # escape environment variables to be loaded to /etc/profile.d/
   as_str = vars.map { |k, str| ["export #{k}=#{str.gsub '$', '\$'}"] }.join("\n")
+  zookeeper_archive = confDir + '/tars/zookeeper-backup.tar.gz'
+  kafka_archive = confDir + '/tars/kafka-backup.tar.gz'
 
   # provisioning aliases and bash functions
   config.vm.provision "Exporting bash aliases", type: 'shell', run: 'always' do |s|
-      s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /vagrant/aliases > /home/vagrant/.bash_aliases"
+    s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /vagrant/aliases > /home/vagrant/.bash_aliases"
   end
 
   config.vm.provision "Creating script symlinks", type: 'shell', run: 'once' do |s|
@@ -44,10 +49,17 @@ Vagrant.configure('2') do |config|
       s.vm.hostname = "zookeeper#{i}"
       s.vm.network 'private_network', ip: "10.30.3.#{i + 1}"
       # s.vm.network "private_network", ip: "10.30.3.#{i+1}", netmask: "255.255.255.0", virtualbox__intnet: "my-network", drop_nat_interface_default_route: true
-      s.vm.provision 'shell', run: 'once',   path: 'scripts/import-zk.sh',       privileged: false, env: vars, args: i.to_s
-      s.vm.provision 'shell', run: 'always', path: 'scripts/start-zookeeper.sh', privileged: false, env: vars, args: i.to_s
-
       
+      if File.exist? zookeeper_archive then
+        s.vm.provision "Importing zookeeper's data", type: 'shell', run: 'once' do |s| 
+          s.path = 'scripts/import-zk.sh'
+          s.privileged = false
+          s.env = vars
+          s.args = i.to_s
+        end
+      end
+
+      s.vm.provision 'shell', run: 'always', path: 'scripts/start-zookeeper.sh', privileged: false, env: vars, args: i.to_s
 
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
@@ -69,7 +81,16 @@ Vagrant.configure('2') do |config|
       s.vm.hostname = "broker#{i}"
       s.vm.network 'private_network', ip: "10.30.3.#{4 - i}0"
       # s.vm.network "private_network", ip: "10.30.3.#{4-i}0", netmask: "255.255.255.0", virtualbox__intnet: "my-network", drop_nat_interface_default_route: true
-      s.vm.provision 'shell', run: 'once',   path: 'scripts/import-kafka.sh', args: i.to_s, privileged: false, env: vars
+      
+      if File.exist? kafka_archive then
+        s.vm.provision "Importing kafka's topics", type: 'shell', run: 'once' do |s| 
+          s.path = 'scripts/import-kafka.sh'
+          s.privileged = false
+          s.env = vars
+          s.args = i.to_s
+        end
+      end
+
       s.vm.provision 'shell', run: 'always', path: 'scripts/start-broker.sh', args: i.to_s, privileged: false, env: vars
 
       s.vm.provider 'virtualbox' do |vb|
