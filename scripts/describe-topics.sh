@@ -1,3 +1,9 @@
 #!/bin/bash
 
-$KAFKA_HOME/bin/kafka-topics.sh --describe --zookeeper vkc-zk1:2181,vkc-zk2:2181,vkc-zk3:2181
+# Describe single topic if topic name arg is provided
+if [ $# -gt 0 ]; then
+   $KAFKA_HOME/bin/kafka-topics.sh --describe --topic $1 --zookeeper $ZK_CLUSTER
+# Else describe all topics
+else 
+   $KAFKA_HOME/bin/kafka-topics.sh --describe --zookeeper $ZK_CLUSTER
+fi
