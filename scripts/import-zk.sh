@@ -7,7 +7,7 @@ if [ ! -d /tmp/zookeeper ]; then
     echo $1 > /tmp/zookeeper/myid
 fi
 
-tar -C /tmp/zookeeper -xzf $KAFKA_TARGET/zookeeper-backup.tar.gz --strip-components=3 version-2
+tar -C /tmp/zookeeper -xzf $KAFKA_TARGET/zookeeper-backup.tar.gz --strip-components=3 var/lib/zookeeper/version-2
 
 # delete snapshots
 # echo 'deleting snapshots'
