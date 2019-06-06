@@ -21,10 +21,11 @@ Vagrant.configure('2') do |config|
     'KAFKA_CLUSTER' => 'vkc-br1:9092,vkc-br2:9092,vkc-br3:9092'
   }
 
-  confDir = File.expand_path(File.dirname(__FILE__))
-
   # escape environment variables to be loaded to /etc/profile.d/
   as_str = vars.map { |k, str| ["export #{k}=#{str.gsub '$', '\$'}"] }.join("\n")
+
+  # assigning archives to variables
+  confDir = File.expand_path(File.dirname(__FILE__))
   zookeeper_archive = confDir + '/tars/zookeeper-backup.tar.gz'
   kafka_archive = confDir + '/tars/kafka-backup.tar.gz'
 
