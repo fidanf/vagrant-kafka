@@ -28,6 +28,10 @@ Vagrant.configure('2') do |config|
       s.inline = "awk '{ sub(\"\r$\", \"\"); print }' /vagrant/aliases > /home/vagrant/.bash_aliases"
   end
 
+  config.vm.provision "Creating script symlinks", type: 'shell', run: 'once' do |s|
+    s.inline = "ln -s $KAFKA_SCRIPTS/*.sh /usr/local/bin/"
+  end
+
   # common provisioning for all
   config.vm.provision 'shell', path: 'scripts/common.sh'
   config.vm.provision 'shell', path: 'scripts/hosts-file-setup.sh', env: vars
@@ -42,7 +46,9 @@ Vagrant.configure('2') do |config|
       # s.vm.network "private_network", ip: "10.30.3.#{i+1}", netmask: "255.255.255.0", virtualbox__intnet: "my-network", drop_nat_interface_default_route: true
       s.vm.provision 'shell', run: 'once',   path: 'scripts/import-zk.sh',       privileged: false, env: vars, args: i.to_s
       s.vm.provision 'shell', run: 'always', path: 'scripts/start-zookeeper.sh', privileged: false, env: vars, args: i.to_s
+
       
+
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
         # vb.customize ['modifyvm', :id, '--cpuexecutioncap', '50']
