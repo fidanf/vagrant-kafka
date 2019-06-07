@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 # create myid file. see http://zookeeper.apache.org/doc/r3.1.1/zookeeperAdmin.html#sc_zkMulitServerSetup
 if [ ! -d /tmp/zookeeper ]; then

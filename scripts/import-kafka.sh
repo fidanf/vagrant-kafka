@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 if [ -z "$1" ]; then
     echo "Broker id must be supplied!"
