@@ -8,15 +8,15 @@ This configuration will start and provision six Ubuntu16 VMs:
 * Three hosts forming a three node Apache Zookeeper Quorum (Replicated ZooKeeper)
 * Three Apache Kafka nodes with one broker each
 
-Each host is a Ubuntu 16.04 64-bit VM provisioned with JDK 8 and Kafka 1.1.0. 
+Each host is a Ubuntu 16.04 64-bit VM provisioned with JDK 8 and Kafka version **0.10.0.1** (which can be modified in the Vagrantfile to suit your needs) 
 
-Here we will be using the verion of Zookeeper that comes pre-packaged with Kafka. This will be Zookeeper version 3.4.10 for the version of Kafka we use. 
+Here we will be using the verion of Zookeeper that comes pre-packaged with Kafka. This will be Zookeeper version 3.4.6 by default. 
 
 Prerequisites
 -------------------------
 
-* Vagrant (tested with 2.0.2) **[make sure you are on 2.x.x version of Vagrant]**
-* VirtualBox (tested with 5.1.12)
+* Vagrant (tested with 2.2.4) **[make sure you are on 2.x.x version of Vagrant]**
+* VirtualBox (tested with 6.0.4)
 
 Setup
 -------------------------
@@ -24,6 +24,7 @@ Setup
 To start it up, just git clone this repo and execute ```vagrant up```. This will take a while the first time as it downloads all required dependencies for you.
 
 Kafka is installed on all hosts and can be easily accessed through the environment variable ```$KAFKA_HOME```
+Handy custom bash scripts warping the most common shell commands are available from either ```/vagrant/scripts``` or the environment variable ```$KAFKA_SCRIPTS```
 
 Here is the mapping of VMs to their private IPs:
 
@@ -132,12 +133,6 @@ After you have enough fun browsing ZK, type `ctl-C` to exit the shell.
 
 #### Get ZK version
 
-First we need to install `nc`: 
-
-```bash
-sudo yum install nc -y
-```
-
 To get the version of ZK type:
 
 ```bash
@@ -179,6 +174,8 @@ Send data to the Kafka topic
 ```bash
 echo "Yet another line from stdin" | $KAFKA_HOME/bin/kafka-console-producer.sh \
    --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092
+// using shorthand script :
+echo "One more line from stdin" | ~/producer.sh test-one 
 ```
 
 You can then test that the line was added by running the consumer
@@ -202,6 +199,12 @@ Dump broker configuration after start
 $KAFKA_SCRIPTS/dump-config.sh
 // look for an older server.log file
 $KAFKA_SCRIPTS/dump-config.sh server.log.2019-06-20-11
+```
+
+Describe single / every topics
+```bash
+~/describe-topics
+~/describe-topics <topic_name>
 ```
 
 
