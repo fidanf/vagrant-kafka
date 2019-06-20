@@ -165,7 +165,7 @@ Create a topic
 
 ```bash
 $KAFKA_SCRIPTS/create-topic.sh test-one
-// using symlink from the home directory
+# using symlink from the home directory
 ~/create-topic.sh test-one
 ```
 
@@ -174,7 +174,7 @@ Send data to the Kafka topic
 ```bash
 echo "Yet another line from stdin" | $KAFKA_HOME/bin/kafka-console-producer.sh \
    --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092
-// using shorthand script :
+# using shorthand script :
 echo "One more line from stdin" | ~/producer.sh test-one 
 ```
 
@@ -182,7 +182,7 @@ You can then test that the line was added by running the consumer
 
 ```bash
 $KAFKA_SCRIPTS/consumer.sh test-one
-// legacy versions:
+# legacy versions:
 $KAFKA_SCRIPTS/old-consumer.sh test-one
 ```
 
@@ -197,7 +197,7 @@ Dump broker configuration after start
 
 ```bash
 $KAFKA_SCRIPTS/dump-config.sh
-// look for an older server.log file
+# look for an older server.log file
 $KAFKA_SCRIPTS/dump-config.sh server.log.2019-06-20-11
 ```
 
