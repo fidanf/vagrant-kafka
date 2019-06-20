@@ -106,6 +106,10 @@ Here are some commands you can run on any of the nodes to see some of the intern
 
 ```$KAFKA_HOME/bin/zookeeper-shell.sh 10.30.3.2:2181``` 
 
+Using custom script (uses all 3 IPs)
+
+```~/zookeeper-shell.sh``` 
+
 (you can use the IP of any of the ZK servers)
 
 
@@ -165,7 +169,9 @@ vagrant ssh zookeeper1
 Create a topic 
 
 ```bash
- /vagrant/scripts/create-topic.sh test-one
+$KAFKA_SCRIPTS/create-topic.sh test-one
+// using symlink from the home directory
+~/create-topic.sh test-one
 ```
 
 Send data to the Kafka topic
@@ -178,8 +184,26 @@ echo "Yet another line from stdin" | $KAFKA_HOME/bin/kafka-console-producer.sh \
 You can then test that the line was added by running the consumer
 
 ```bash
-/vagrant/scripts/consumer.sh test-one
+$KAFKA_SCRIPTS/consumer.sh test-one
+// legacy versions:
+$KAFKA_SCRIPTS/old-consumer.sh test-one
 ```
+
+Set custom log retention for a given topic
+
+```bash
+$KAFKA_HOME/bin/kafka-configs.sh --zookeeper $ZK_CLUSTER --entity-type topics --entity-name my-topic \
+   --alter --add-config segment.bytes=12288
+```
+
+Dump broker configuration after start
+
+```bash
+$KAFKA_SCRIPTS/dump-config.sh
+// look for an older server.log file
+$KAFKA_SCRIPTS/dump-config.sh server.log.2019-06-20-11
+```
+
 
 ##### Add a continued stream of data
 
@@ -205,10 +229,16 @@ vmstat -a 1 -n 100 | $KAFKA_HOME/bin/kafka-console-producer.sh \
    --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092 &
 ```
 
+Using producer.sh script 
+
+```bash
+vmstat -a 1 -n | ~/producer.sh topicTest &
+```
+
 While the producer runs in the background you can start the consumer to see what happens
 
 ```bash
-/vagrant/scripts/consumer.sh test-one
+~/consumer.sh test-one
 ```
 
 You should be seeing the output of `vmstat` in the consumer console. 
@@ -223,7 +253,7 @@ The `create-topic.sh` script creates a topic with replication factor 3 and 1 num
 Assuming you have completed the `vmstat` example above using topic `test-one`:
 
 ```bash
-/vagrant/scripts/get-offset-info.sh test-one
+$KAFKA_SCRIPTS/get-offset-info.sh test-one
 test-one:0:102
 ```
 
