@@ -18,7 +18,7 @@ if [ ! -d $KAFKA_HOME ] ; then
    tar -xzf "$KAFKA_TARGET/$KAFKA_NAME.tgz" -C /opt
 fi
 
-chown vagrant:vagrant -R $KAFKA_NAME
+chown -R vagrant:vagrant /opt
 
 echo "==> Done installing JDK and Kafka..."
 
