@@ -4,8 +4,7 @@
 Vagrant.configure('2') do |config|
   
 
-  config.vm.box = 'rgsystems/xenial64'
-  # config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'rgsystems/bionic64'
 
   # Allow SSH Agent Forward from The Box
   config.ssh.forward_agent = true
@@ -16,9 +15,9 @@ Vagrant.configure('2') do |config|
     'KAFKA_NAME' => 'kafka_2.11-$KAFKA_VERSION',
     'KAFKA_TARGET' => '/vagrant/tars',
     'KAFKA_SCRIPTS' => '/vagrant/scripts',
-    'KAFKA_HOME' => '$HOME/$KAFKA_NAME',
-    'ZK_CLUSTER' => 'vkc-zk1:2181,vkc-zk2:2181,vkc-zk3:2181',
-    'KAFKA_CLUSTER' => 'vkc-br1:9092,vkc-br2:9092,vkc-br3:9092'
+    'KAFKA_HOME' => '/opt/$KAFKA_NAME',
+    'ZK_CLUSTER' => 'zookeeper01:2181,zookeeper02:2181,zookeeper03:2181',
+    'KAFKA_CLUSTER' => 'broker01:9092,broker02:9092,broker03:9092'
   }
 
   # escape environment variables to be loaded to /etc/profile.d/
@@ -40,15 +39,15 @@ Vagrant.configure('2') do |config|
   config.vm.provision 'shell', inline: "echo \"#{as_str}\" > /etc/profile.d/kafka_vagrant_env.sh", run: 'always'
   config.vm.provision 'shell', path: 'scripts/init.sh', env: vars
 
-  # globally available vagrant scripts
+  # make vagrant scripts globally available
   config.vm.provision "Creating script symlinks", type: 'shell', run: 'once' do |s|
     s.inline = "find $KAFKA_SCRIPTS/ -name \"*.sh\" -exec ln -s {} /usr/local/bin/ \\;"
   end
 
   # configure zookeeper cluster
   (1..3).each do |i|
-    config.vm.define "zookeeper#{i}" do |s|
-      s.vm.hostname = "zookeeper#{i}"
+    config.vm.define "zookeeper0#{i}" do |s|
+      s.vm.hostname = "zookeeper0#{i}"
       s.vm.network 'private_network', ip: "10.30.3.#{i + 1}"
       # s.vm.network "private_network", ip: "10.30.3.#{i+1}", netmask: "255.255.255.0", virtualbox__intnet: "my-network", drop_nat_interface_default_route: true
       
@@ -72,15 +71,15 @@ Vagrant.configure('2') do |config|
         vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
         vb.gui = false
-        vb.name = "vkc-zk#{i}"
+        vb.name = "zookeeper0#{i}"
       end
     end
   end
 
   # configure brokers
   (1..3).each do |i|
-    config.vm.define "broker#{i}" do |s|
-      s.vm.hostname = "broker#{i}"
+    config.vm.define "broker0#{i}" do |s|
+      s.vm.hostname = "broker0#{i}"
       s.vm.network 'private_network', ip: "10.30.3.#{4 - i}0"
       # s.vm.network "private_network", ip: "10.30.3.#{4-i}0", netmask: "255.255.255.0", virtualbox__intnet: "my-network", drop_nat_interface_default_route: true
       
@@ -104,7 +103,7 @@ Vagrant.configure('2') do |config|
         vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
         vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
         vb.gui = false
-        vb.name = "vkc-br#{i}"
+        vb.name = "broker0#{i}"
       end
     end
   end

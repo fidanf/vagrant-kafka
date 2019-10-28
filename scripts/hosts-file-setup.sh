@@ -1,11 +1,13 @@
 #!/bin/bash
 
-echo "hosts file setup..."
+echo "==> Updating hosts file"
 
-sudo echo "10.30.3.2 vkc-zk1" | sudo tee -a /etc/hosts
-sudo echo "10.30.3.3 vkc-zk2" | sudo tee -a /etc/hosts
-sudo echo "10.30.3.4 vkc-zk3" | sudo tee -a /etc/hosts
+echo "
+10.30.3.2 zookeeper01
+10.30.3.3 zookeeper02
+10.30.3.4 zookeeper03
 
-sudo echo "10.30.3.30 vkc-br1" | sudo tee -a /etc/hosts
-sudo echo "10.30.3.20 vkc-br2" | sudo tee -a /etc/hosts
-sudo echo "10.30.3.10 vkc-br3" | sudo tee -a /etc/hosts
+10.30.3.30 broker01
+10.30.3.20 broker02
+10.30.3.10 broker03
+" | tee -a /etc/hosts
