@@ -2,10 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure('2') do |config|
-  
-
-  config.vm.box = 'rgsystems/xenial64'
-  # config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'rgsystems/bionic64'
 
   # Allow SSH Agent Forward from The Box
   config.ssh.forward_agent = true
