@@ -1,3 +1,7 @@
 function status() {
     netstat -ant | grep -E ':2181|:9092'
 }
+
+function d2u() {
+    find /vagrant/scripts/ -name '*.sh' -exec 'dos2unix' {} \;
+}
