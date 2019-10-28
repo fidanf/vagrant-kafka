@@ -1,9 +1,9 @@
-Vagrant - Kafka
+Vagrant Kafka 
 =============
 
 Vagrant configuration to setup a partitioned Apache Kafka installation with clustered Apache Zookeeper.
 
-This configuration will start and provision six Ubuntu16 VMs:
+This configuration will start and provision six VMs:
 
 * Three hosts forming a three node Apache Zookeeper Quorum (Replicated ZooKeeper)
 * Three Apache Kafka nodes with one broker each
@@ -28,24 +28,24 @@ Handy custom bash scripts warping the most common shell commands are available f
 
 Here is the mapping of VMs to their private IPs:
 
-| VM Name    | Host Name | IP Address |
-| ---------- | --------- | ---------- |
-| zookeeper1 | vkc-zk1   | 10.30.3.2  |
-| zookeeper2 | vkc-zk2   | 10.30.3.3  |
-| zookeeper3 | vkc-zk3   | 10.30.3.4  |
-| broker1    | vkc-br1   | 10.30.3.30 |
-| broker2    | vkc-br2   | 10.30.3.20 |
-| broker3    | vkc-br3   | 10.30.3.10 |
+| VM Name     | Host Name     | IP Address |
+| ----------  | ------------- | ---------- |
+| zookeeper01 | zookeeper01   | 10.30.3.2  |
+| zookeeper02 | zookeeper02   | 10.30.3.3  |
+| zookeeper03 | zookeeper03   | 10.30.3.4  |
+| broker01    | broker01      | 10.30.3.30 |
+| broker02    | broker02      | 10.30.3.20 |
+| broker03    | broker03      | 10.30.3.10 |
 
 Hosts file entries:
 
 ```
-10.30.3.2	vkc-zk1
-10.30.3.3 	vkc-zk2
-10.30.3.4 	vkc-zk3
-10.30.3.30 	vkc-br1
-10.30.3.20 	vkc-br2
-10.30.3.10 	vkc-br3
+10.30.3.2	zookeeper01
+10.30.3.3 	zookeeper02
+10.30.3.4 	zookeeper03
+10.30.3.30 	broker01
+10.30.3.20 	broker02
+10.30.3.10 	broker03
 ```
 
 Zookeeper servers bind to port 2181. Kafka brokers bind to port 9092. 
@@ -58,12 +58,12 @@ First test that all nodes are up ```vagrant status```. The result should be simi
 ```
 Current machine states:
 
-zookeeper1                running (virtualbox)
-zookeeper2                running (virtualbox)
-zookeeper3                running (virtualbox)
-broker1                   running (virtualbox)
-broker2                   running (virtualbox)
-broker3                   running (virtualbox)
+zookeeper01                running (virtualbox)
+zookeeper02                running (virtualbox)
+zookeeper03                running (virtualbox)
+broker01                   running (virtualbox)
+broker02                   running (virtualbox)
+broker03                   running (virtualbox)
 
 
 This environment represents multiple VMs. The VMs are all listed
@@ -71,7 +71,7 @@ above with their current state. For more information about a specific
 VM, run 'vagrant status NAME''.
 ```
 
-Login to any host with e.g., ```vagrant ssh broker1```. Some scripts have been included for convenience:
+Login to any host with e.g., ```vagrant ssh broker01```. Some scripts have been included for convenience:
 
 * Create a new topic ```/vagrant/scripts/create-topic.sh <topic name>``` (create as many as you see fit)
 
@@ -173,7 +173,7 @@ Send data to the Kafka topic
 
 ```bash
 echo "Yet another line from stdin" | $KAFKA_HOME/bin/kafka-console-producer.sh \
-   --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092
+   --topic test-one --broker-list broker01:9092,broker02:9092,broker03:9092
 # using shorthand script :
 echo "One more line from stdin" | ~/producer.sh test-one 
 ```
@@ -229,7 +229,7 @@ Redirecing this output to Kafka creates a basic form of a streaming producer.
 
 ```bash
 vmstat -a 1 -n 100 | $KAFKA_HOME/bin/kafka-console-producer.sh \
-   --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092 &
+   --topic test-one --broker-list broker01:9092,broker02:9092,broker03:9092 &
 ```
 
 Using producer.sh script 
