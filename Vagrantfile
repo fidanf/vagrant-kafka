@@ -17,6 +17,7 @@ Vagrant.configure('2') do |config|
     'KAFKA_SCRIPTS' => '/vagrant/scripts',
     'KAFKA_HOME' => '/opt/$KAFKA_NAME',
     'ZK_CLUSTER' => 'zookeeper01:2181,zookeeper02:2181,zookeeper03:2181',
+    'ZK_HOME' => '/opt/zookeeper'
     'KAFKA_CLUSTER' => 'broker01:9092,broker02:9092,broker03:9092'
   }
 
