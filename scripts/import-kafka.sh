@@ -5,11 +5,11 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-if [ ! -d /opt/kafka-logs ]; then
-    mkdir /opt/kafka-logs
+if [ ! -d /home/vagrant/kafka-logs ]; then
+    mkdir /home/vagrant/kafka-logs
 fi
 
-tar -C /opt/kafka-logs/ -xf $KAFKA_TARGET/kafka-backup.tgz --strip-components=2
+tar -C /home/vagrant/kafka-logs/ -xf $KAFKA_TARGET/kafka-backup.tgz --strip-components=2
 
 # Updating broker id
-sed -i "s/broker.id=.*/broker.id=$1/g" /opt/kafka-logs/meta.properties
+sed -i "s/broker.id=.*/broker.id=$1/g" /home/vagrant/kafka-logs/meta.properties
