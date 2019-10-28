@@ -61,7 +61,7 @@ Vagrant.configure('2') do |config|
         end
       end
 
-      s.vm.provision 'shell', run: 'always', path: 'scripts/start-zookeeper.sh', privileged: false, env: vars, args: i.to_s
+      s.vm.provision 'shell', run: 'always', path: 'scripts/start-zookeeper.sh', privileged: true, env: vars, args: i.to_s
 
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
@@ -93,7 +93,7 @@ Vagrant.configure('2') do |config|
         end
       end
 
-      s.vm.provision 'shell', run: 'always', path: 'scripts/start-broker.sh', args: i.to_s, privileged: false, env: vars
+      s.vm.provision 'shell', run: 'always', path: 'scripts/start-broker.sh', args: i.to_s, privileged: true, env: vars
 
       s.vm.provider 'virtualbox' do |vb|
         #  This setting controls how much cpu time a virtual CPU can use. A value of 50 implies a single virtual CPU can use up to 50% of a single host CPU.
