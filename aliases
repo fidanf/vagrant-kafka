@@ -1,3 +1,11 @@
 function status() {
     netstat -ant | grep -E ':2181|:9092'
 }
+
+function d2u() {
+    find /vagrant/scripts -type f -name '*.sh' -exec 'dos2unix' {} \;
+}
+
+function logs() {
+    tail -f $KAFKA_HOME/logs/server.log
+}
