@@ -79,7 +79,7 @@ Login to any host with e.g., ```vagrant ssh broker1```. Some scripts have been i
 
 * Topics can be listed with ```/vagrant/scripts/list-topics.sh```
 
-* Start a console producer ```/vagrant/scripts/producer.sh <topic name>```. Type few messages and seperate them with new lines (`ctl-C` to exit). 
+* Start a console producer ```/vagrant/scripts/producer.sh <topic name>```. Type few messages and seperate them with new lines (`ctrl+c` to exit). 
 
 * ```/vagrant/scripts/consumer.sh <topic name>```: this will create a console consumer, getting messages from the topic created before. It will read all the messages each time starting from the beginning.
 
@@ -129,7 +129,7 @@ ls /brokers/ids
 
 We can see that there are two topics created (t1, t2) and we already know that we have three brokers with ids 1,2,3. 
 
-After you have enough fun browsing ZK, type `ctl-C` to exit the shell.
+After you have enough fun browsing ZK, type `ctrl+c` to exit the shell.
 
 #### Get ZK version
 
@@ -246,7 +246,7 @@ While the producer runs in the background you can start the consumer to see what
 
 You should be seeing the output of `vmstat` in the consumer console. 
 
-When you are all done, kill the consumer by `ctl-C`. The producer will terminate by itself after 100 seconds.
+When you are all done, kill the consumer by `ctrl+c`. The producer will terminate by itself after 100 seconds.
 
 
 #### Offsets
