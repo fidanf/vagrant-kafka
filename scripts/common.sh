@@ -1,6 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
-# Installing common dependencies 
-
-sudo apt-get update
-sudo apt-get install -y unzip zip dos2unix wget telnet
+apt-get update
+apt-get install -y unzip zip dos2unix wget telnet jq openjdk-8-jdk
