@@ -30,12 +30,12 @@ Here is the mapping of VMs to their private IPs:
 
 | VM Name    | Host Name     | IP Address |
 | ---------- | ------------- | ---------- |
-| zookeeper1 | zookeeper01   | 10.30.3.2  |
-| zookeeper2 | zookeeper02   | 10.30.3.3  |
-| zookeeper3 | zookeeper03   | 10.30.3.4  |
-| broker1    | broker01      | 10.30.3.30 |
-| broker2    | broker02      | 10.30.3.20 |
-| broker3    | broker03      | 10.30.3.10 |
+| zookeeper01 | zookeeper01   | 10.30.3.2  |
+| zookeeper02 | zookeeper02   | 10.30.3.3  |
+| zookeeper03 | zookeeper03   | 10.30.3.4  |
+| broker01    | broker01      | 10.30.3.30 |
+| broker02    | broker02      | 10.30.3.20 |
+| broker03    | broker03      | 10.30.3.10 |
 
 Hosts file entries:
 
