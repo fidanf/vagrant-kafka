@@ -8,15 +8,15 @@ This configuration will start and provision six Ubuntu16 VMs:
 * Three hosts forming a three node Apache Zookeeper Quorum (Replicated ZooKeeper)
 * Three Apache Kafka nodes with one broker each
 
-Each host is a Ubuntu 16.04 64-bit VM provisioned with JDK 8 and Kafka version **0.10.0.1** (which can be modified in the Vagrantfile to suit your needs) 
+Each host is a Ubuntu 16.04 64-bit VM provisioned with JDK 8 and Kafka version (`0.10.0.1` by default), which can be modified in the Vagrantfile to suit your needs. 
 
 Here we will be using the verion of Zookeeper that comes pre-packaged with Kafka. This will be Zookeeper version 3.4.6 by default. 
 
 Prerequisites
 -------------------------
 
-* Vagrant (tested with 2.2.4) **[make sure you are on 2.x.x version of Vagrant]**
-* VirtualBox (tested with 6.0.4)
+* Vagrant (tested with 2.2.7) **[make sure you are on 2.x.x version of Vagrant]**
+* VirtualBox (tested with 6.1.2)
 
 Setup
 -------------------------
@@ -28,24 +28,24 @@ Handy custom bash scripts warping the most common shell commands are available f
 
 Here is the mapping of VMs to their private IPs:
 
-| VM Name    | Host Name | IP Address |
-| ---------- | --------- | ---------- |
-| zookeeper1 | vkc-zk1   | 10.30.3.2  |
-| zookeeper2 | vkc-zk2   | 10.30.3.3  |
-| zookeeper3 | vkc-zk3   | 10.30.3.4  |
-| broker1    | vkc-br1   | 10.30.3.30 |
-| broker2    | vkc-br2   | 10.30.3.20 |
-| broker3    | vkc-br3   | 10.30.3.10 |
+| VM Name    | Host Name     | IP Address |
+| ---------- | ------------- | ---------- |
+| zookeeper1 | zookeeper01   | 10.30.3.2  |
+| zookeeper2 | zookeeper02   | 10.30.3.3  |
+| zookeeper3 | zookeeper03   | 10.30.3.4  |
+| broker1    | broker01      | 10.30.3.30 |
+| broker2    | broker02      | 10.30.3.20 |
+| broker3    | broker03      | 10.30.3.10 |
 
 Hosts file entries:
 
 ```
-10.30.3.2	vkc-zk1
-10.30.3.3 	vkc-zk2
-10.30.3.4 	vkc-zk3
-10.30.3.30 	vkc-br1
-10.30.3.20 	vkc-br2
-10.30.3.10 	vkc-br3
+10.30.3.2	zookeeper01
+10.30.3.3 	zookeeper02
+10.30.3.4 	zookeeper03
+10.30.3.30 	broker01
+10.30.3.20 	broker02
+10.30.3.10 	broker03
 ```
 
 Zookeeper servers bind to port 2181. Kafka brokers bind to port 9092. 
@@ -58,12 +58,12 @@ First test that all nodes are up ```vagrant status```. The result should be simi
 ```
 Current machine states:
 
-zookeeper1                running (virtualbox)
-zookeeper2                running (virtualbox)
-zookeeper3                running (virtualbox)
-broker1                   running (virtualbox)
-broker2                   running (virtualbox)
-broker3                   running (virtualbox)
+zookeeper01                running (virtualbox)
+zookeeper02                running (virtualbox)
+zookeeper03                running (virtualbox)
+broker01                   running (virtualbox)
+broker02                   running (virtualbox)
+broker03                   running (virtualbox)
 
 
 This environment represents multiple VMs. The VMs are all listed
@@ -136,18 +136,18 @@ After you have enough fun browsing ZK, type `ctrl+c` to exit the shell.
 To get the version of ZK type:
 
 ```bash
-echo status | nc 10.30.3.2 2181
+echo status | nc zookeeper0<ID> 2181
 ```
 
-You can replace 10.30.3.2 with any ZK IP 10.30.3.<2,3,4> and execute the above command from any node within the cluster. 
+You can replace <ID> with any ZK id (1, 2 or 3) and execute the above command from any node within the cluster. 
 
 *Q: Which Zookeeper server is the leader?*
 
 Here is a simple script that asks each server for its mode:
 
 ```bash
-for i in 2 3 4; do
-   echo "10.30.3.$i is a "$(echo status | nc 10.30.3.$i 2181 | grep ^Mode | awk '{print $2}')
+for i in 1 2 3 ; do
+   echo "zookeeper0$i is a "$(echo status | nc zookeeper0$i 2181 | grep ^Mode | awk '{print $2}')
 done
 ```
 
@@ -173,7 +173,7 @@ Send data to the Kafka topic
 
 ```bash
 echo "Yet another line from stdin" | $KAFKA_HOME/bin/kafka-console-producer.sh \
-   --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092
+   --topic test-one --broker-list broker01:9092,broker02:9092,broker03:9092
 # using shorthand script :
 echo "One more line from stdin" | ~/producer.sh test-one 
 ```
@@ -181,9 +181,9 @@ echo "One more line from stdin" | ~/producer.sh test-one
 You can then test that the line was added by running the consumer
 
 ```bash
-$KAFKA_SCRIPTS/consumer.sh test-one
+$KAFKA_SCRIPTS/consumer-new.sh test-one
 # legacy versions:
-$KAFKA_SCRIPTS/old-consumer.sh test-one
+$KAFKA_SCRIPTS/consumer-old.sh test-one
 ```
 
 Set custom log retention for a given topic
@@ -229,7 +229,7 @@ Redirecing this output to Kafka creates a basic form of a streaming producer.
 
 ```bash
 vmstat -a 1 -n 100 | $KAFKA_HOME/bin/kafka-console-producer.sh \
-   --topic test-one --broker-list vkc-br1:9092,vkc-br2:9092,vkc-br3:9092 &
+   --topic test-one --broker-list broker01:9092,broker02:9092,broker03:9092 &
 ```
 
 Using producer.sh script 
