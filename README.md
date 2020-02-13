@@ -8,9 +8,9 @@ This configuration will start and provision six Ubuntu16 VMs:
 * Three hosts forming a three node Apache Zookeeper Quorum (Replicated ZooKeeper)
 * Three Apache Kafka nodes with one broker each
 
-Each host is a Ubuntu 16.04 64-bit VM provisioned with JDK 8 and Kafka version (`0.10.0.1` by default), which can be modified in the Vagrantfile to suit your needs. 
+Each host is a Ubuntu 18.04 64-bit VM provisioned with JDK 8 and Kafka version (`0.10.0.1` by default), which can be modified in the Vagrantfile to suit your needs. 
 
-Here we will be using the verion of Zookeeper that comes pre-packaged with Kafka. This will be Zookeeper version 3.4.6 by default. 
+Here we will be using the verion of Zookeeper that comes pre-packaged with Kafka. This will be Zookeeper version `3.4.10` by default. 
 
 Prerequisites
 -------------------------
