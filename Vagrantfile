@@ -34,7 +34,7 @@ Vagrant.configure('2') do |config|
 
   # make vagrant scripts globally available
   config.vm.provision "Creating script symlinks", type: 'shell', run: 'once' do |s|
-    s.inline = "find $KAFKA_SCRIPTS/ -name \"*.sh\" -exec ln -s {} /usr/local/bin/ \\;"
+    s.inline = "find $KAFKA_SCRIPTS/ -name \"*.sh\" -exec ln -sf {} /usr/local/bin/ \\;"
   end
 
   # configure zookeeper cluster

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -eux
 
 FILENAME="kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz"
 
@@ -14,10 +14,9 @@ fi
 echo "Downloading Kafka from $url"
 wget -q "${url}" -O "/tmp/${FILENAME}"
 
-if [ ! -d $KAFKA_HOME ]; then 
-    mkdir -p $KAFKA_HOME
-    tar -C $KAFKA_HOME -zxf "/tmp/${FILENAME}" --strip-components=1 
-fi
+echo "==> Extracting files"
+mkdir -p $KAFKA_HOME
+tar -C $KAFKA_HOME -zvxf "/tmp/${FILENAME}" --strip-components=1 && echo "==> Done."
 
 # refresh permissions
 chown vagrant:vagrant -R $KAFKA_HOME
